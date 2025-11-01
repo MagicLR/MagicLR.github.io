@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = document.getElementById("login-email").value;
         const password = document.getElementById("login-password").value;
 
-        const response = await fetch("https://magic.dpdns.org:4433/login", {
+        const response = await fetch("https://magiclr.dpdns.org:4433/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = document.getElementById("register-email").value;
         const password = document.getElementById("register-password").value;
 
-        const response = await fetch("https://magic.dpdns.org:4433/register", {
+        const response = await fetch("https://magiclr.dpdns.org:4433/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
