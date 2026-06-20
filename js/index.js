@@ -29,30 +29,30 @@
             group: "AIYY"
         },
         // // ========== MagicLR 服务组（IPv6 直连）==========
-        // {
-        //     name: "MagicLR",
-        //     rawUrl: "http://magiclr.dpdns.org:8888",
-        //     description: "主站 · 工具与资源中心",
-        //     icon: "✨",
-        //     domainType: "magiclr",
-        //     group: "MagicLR"
-        // },
-        // {
-        //     name: "OpenList MagicLR",
-        //     rawUrl: "http://openlist.magiclr.dpdns.org:8888",
-        //     description: "OpenList 程序 · 快速文件共享",
-        //     icon: "📁",
-        //     domainType: "magiclr",
-        //     group: "MagicLR"
-        // },
-        // {
-        //     name: "Blog MagicLR",
-        //     rawUrl: "http://blog.magiclr.dpdns.org:8888",
-        //     description: "博客 · 技术分享与记录",
-        //     icon: "📝",
-        //     domainType: "magiclr",
-        //     group: "MagicLR"
-        // },
+        {
+            name: "MagicLR",
+            rawUrl: "http://aily.dpdns.org:8888",
+            description: "主站 · 工具与资源中心",
+            icon: "✨",
+            domainType: "magiclr",
+            group: "MagicLR"
+        },
+        {
+            name: "OpenList MagicLR",
+            rawUrl: "http://openlist.aily.dpdns.org:8888",
+            description: "OpenList 程序 · 快速文件共享",
+            icon: "📁",
+            domainType: "magiclr",
+            group: "MagicLR"
+        },
+        {
+            name: "Blog MagicLR",
+            rawUrl: "http://blog.aily.dpdns.org:8888",
+            description: "博客 · 技术分享与记录",
+            icon: "📝",
+            domainType: "magiclr",
+            group: "MagicLR"
+        },
         // ========== LYY 服务组（暂时 IPv6 直连，过段时间改 CF 代理）==========
         {
             name: "LYY",
