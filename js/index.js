@@ -1,7 +1,7 @@
 // 导航站核心脚本
 (function() {
     // 站点数据 —— 按服务分组排列（主站 + OpenList + Blog 成组出现）
-    // 注：lyy.qd.je 系列暂时使用 IPv6 直连，后续如需改为 CF 代理，只需将 domainType 从 "magiclr" 改为 "cfproxy" 即可
+    // 注：lyy.qd.je 系列暂时使用 IPv6 直连，后续如需改为 CF 代理，只需将 domainType 从 "aily" 改为 "cfproxy" 即可
     const sitesRaw = [
         // ========== AIYY 服务组（Cloudflare 代理）==========
         {
@@ -28,30 +28,30 @@
             domainType: "cfproxy",
             group: "AIYY"
         },
-        // // ========== MagicLR 服务组（IPv6 直连）==========
+        // // ========== aily 服务组（IPv6 直连）==========
         {
-            name: "MagicLR",
+            name: "aily",
             rawUrl: "http://aily.dpdns.org:8888",
             description: "主站 · 工具与资源中心",
             icon: "✨",
-            domainType: "magiclr",
-            group: "MagicLR"
+            domainType: "aily",
+            group: "aily"
         },
         {
-            name: "OpenList MagicLR",
+            name: "OpenList aily",
             rawUrl: "http://openlist.aily.dpdns.org:8888",
             description: "OpenList 程序 · 快速文件共享",
             icon: "📁",
-            domainType: "magiclr",
-            group: "MagicLR"
+            domainType: "aily",
+            group: "aily"
         },
         {
-            name: "Blog MagicLR",
+            name: "Blog aily",
             rawUrl: "http://blog.aily.dpdns.org:8888",
             description: "博客 · 技术分享与记录",
             icon: "📝",
-            domainType: "magiclr",
-            group: "MagicLR"
+            domainType: "aily",
+            group: "aily"
         },
         // ========== LYY 服务组（暂时 IPv6 直连，过段时间改 CF 代理）==========
         {
@@ -59,7 +59,7 @@
             rawUrl: "http://lyy.qd.je:8888",
             description: "主站 · 工具与资源中心（当前 IPv6 直连）",
             icon: "🌟",
-            domainType: "magiclr",     // 暂时 IPv6 直连，后期改为 "cfproxy"
+            domainType: "aily",     // 暂时 IPv6 直连，后期改为 "cfproxy"
             group: "LYY"
         },
         {
@@ -67,7 +67,7 @@
             rawUrl: "http://openlist.lyy.qd.je:8888",
             description: "OpenList 程序 · 快速文件共享（当前 IPv6 直连）",
             icon: "📂",
-            domainType: "magiclr",     // 暂时 IPv6 直连，后期改为 "cfproxy"
+            domainType: "aily",     // 暂时 IPv6 直连，后期改为 "cfproxy"
             group: "LYY"
         },
         {
@@ -75,7 +75,7 @@
             rawUrl: "http://blog.lyy.qd.je:8888",
             description: "博客 · 技术分享与记录（当前 IPv6 直连）",
             icon: "📝",
-            domainType: "magiclr",     // 暂时 IPv6 直连，后期改为 "cfproxy"
+            domainType: "aily",     // 暂时 IPv6 直连，后期改为 "cfproxy"
             group: "LYY"
         }
     ];
@@ -87,7 +87,7 @@
             let displayHost = "";
             let extraBadge = "";
 
-            if (site.domainType === "magiclr") {
+            if (site.domainType === "aily") {
                 const urlObj = new URL(site.rawUrl);
                 displayHost = urlObj.host;
                 extraBadge = "🌐 IPv6直连";
@@ -291,7 +291,7 @@
         gridContainer.innerHTML = cardsHtml;
 
         // 添加 IPv6 提示栏（如果存在 IPv6 直连站点）
-        if (sites.some(s => s.domainType === 'magiclr')) {
+        if (sites.some(s => s.domainType === 'aily')) {
             const footer = document.querySelector('.footer');
             if (footer && !document.getElementById('ipv6StatusHint')) {
                 const hintDiv = document.createElement('div');
