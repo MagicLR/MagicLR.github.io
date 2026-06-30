@@ -141,6 +141,54 @@
         });
     }
 
+    function updateSiteStatus(index, text, statusType) {
+        const statusEl = document.getElementById(`siteStatus-${index}`);
+        if (!statusEl) return;
+        statusEl.textContent = text;
+        statusEl.className = `status status-${statusType}`;
+    }
+
+    function updateNetworkStatusHint() {
+        const hint = document.getElementById('networkStatusHint');
+        if (!hint) return;
+        if (navigator.onLine) {
+            hint.innerHTML = '🌐 浏览器在线，正在检测站点访问状态。';
+            hint.style.color = '#38bdf8';
+        } else {
+            hint.innerHTML = '🚫 浏览器离线，无法访问网址检测。';
+            hint.style.color = '#f87171';
+        }
+    }
+
+    function checkSiteStatus(site, index) {
+        const url = site.url;
+        if (!navigator.onLine) {
+            updateSiteStatus(index, '● 离线', 'offline');
+            return;
+        }
+
+        if (window.location.protocol === 'https:' && url.startsWith('http:')) {
+            updateSiteStatus(index, '⚠️ 无法检测 HTTP 链接', 'warning');
+            return;
+        }
+
+        fetch(url, {
+            method: 'GET',
+            mode: 'no-cors',
+            cache: 'no-store',
+            credentials: 'omit'
+        }).then(() => {
+            updateSiteStatus(index, '● 在线', 'online');
+        }).catch(() => {
+            updateSiteStatus(index, '● 离线', 'offline');
+        });
+    }
+
+    function checkAllSiteStatuses() {
+        updateNetworkStatusHint();
+        sites.forEach((site, index) => checkSiteStatus(site, index));
+    }
+
     // 全局复制函数
     window.copyToClipboard = function(text, event) {
         if (event) event.stopPropagation();
@@ -261,7 +309,7 @@
         }
 
         let cardsHtml = '';
-        sites.forEach(site => {
+        sites.forEach((site, index) => {
             const targetUrl = site.url;
             const displayHost = site.rawHost;
             const strategyBadge = site.extraBadge ? `<span class="strategy-badge">${site.extraBadge}</span>` : '';
@@ -270,7 +318,7 @@
                     <div class="card-inner">
                         <div class="icon-area">
                             <div class="icon-bg">${site.icon}</div>
-                            <div class="status">● 在线</div>
+                            <div class="status status-pending" id="siteStatus-${index}">● 检测中…</div>
                         </div>
                         <div class="site-title">
                             ${escapeHtml(site.name)}
@@ -290,18 +338,27 @@
         });
         gridContainer.innerHTML = cardsHtml;
 
-        // 添加 IPv6 提示栏（如果存在 IPv6 直连站点）
+        const footer = document.querySelector('.footer');
+        if (footer && !document.getElementById('networkStatusHint')) {
+            const networkHint = document.createElement('div');
+            networkHint.id = 'networkStatusHint';
+            networkHint.style.marginTop = '1rem';
+            networkHint.style.textAlign = 'center';
+            footer.appendChild(networkHint);
+        }
+
         if (sites.some(s => s.domainType === 'aily')) {
-            const footer = document.querySelector('.footer');
             if (footer && !document.getElementById('ipv6StatusHint')) {
                 const hintDiv = document.createElement('div');
                 hintDiv.id = 'ipv6StatusHint';
-                hintDiv.style.marginTop = '1rem';
+                hintDiv.style.marginTop = '0.5rem';
                 hintDiv.style.textAlign = 'center';
                 footer.appendChild(hintDiv);
                 checkIPv6Connectivity();
             }
         }
+
+        checkAllSiteStatuses();
     }
 
     // ========== 初始化 ==========
@@ -309,6 +366,8 @@
         initTheme();
         addThemeToggle();
         buildCards();
+        window.addEventListener('online', checkAllSiteStatuses);
+        window.addEventListener('offline', updateNetworkStatusHint);
     }
 
     if (document.readyState === 'loading') {

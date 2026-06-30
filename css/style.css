@@ -203,6 +203,30 @@ h1 {
     font-weight: 500;
 }
 
+.status-pending {
+    background: #fbbf2420;
+    color: #f59e0b;
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.status-online {
+    background: #10b98120;
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.status-offline {
+    background: #ef444420;
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.status-warning {
+    background: #f9731620;
+    color: #f97316;
+    border-color: rgba(249, 115, 22, 0.2);
+}
+
 .site-title {
     font-size: 1.55rem;
     font-weight: 600;
