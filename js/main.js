@@ -210,6 +210,11 @@
                 const status = resultMap[site.detectKey] || 'offline';
                 updateSiteStatus(index, status === 'online' ? '● 在线' : '● 离线', status);
             });
+            const hint = document.getElementById('networkStatusHint');
+            if (hint) {
+                hint.innerHTML = '✅ 站点检测已完成';
+                hint.style.color = '#10b981';
+            }
         });
     }
 
@@ -301,22 +306,49 @@
 
     // ========== IPv6 连通性检测 ==========
     function checkIPv6Connectivity() {
-        const img = new Image();
-        img.src = "https://test.wsmdn.dpdns.org";// + Date.now();
-        img.onload = () => {
-            const hintContainer = document.getElementById('ipv6StatusHint');
-            if (hintContainer) {
-                hintContainer.innerHTML = '✅ 当前网络支持IPv6，IPv6直连站点可用';
+        const hintContainer = document.getElementById('ipv6StatusHint');
+        if (!hintContainer) return;
+
+        if (!navigator.onLine) {
+            hintContainer.innerHTML = '🚫 浏览器离线，无法检测IPv6连接。';
+            hintContainer.style.color = '#f87171';
+            return;
+        }
+
+        hintContainer.innerHTML = '⏳ 正在检测IPv6可用性...';
+        hintContainer.style.color = '#38bdf8';
+
+        const url = 'https://test.wsmdn.dpdns.org';
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+        fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-store',
+            credentials: 'omit',
+            signal: controller.signal
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('状态码 ' + response.status);
+            }
+            return response.text();
+        }).then(text => {
+            clearTimeout(timeoutId);
+            const ipv6 = (text || '').trim().match(/([0-9a-fA-F]{1,4}:){2,}[0-9a-fA-F]{1,4}/g);
+            const address = ipv6 && ipv6.length ? ipv6[0] : (text || '').trim();
+            if (address) {
+                hintContainer.innerHTML = `✅ 当前网络支持IPv6，IPv6直连站点可用。地址: ${escapeHtml(address)}`;
+                hintContainer.style.color = '#10b981';
+            } else {
+                hintContainer.innerHTML = '✅ 当前网络支持IPv6，IPv6直连站点可用，但未返回可解析地址。';
                 hintContainer.style.color = '#10b981';
             }
-        };
-        img.onerror = () => {
-            const hintContainer = document.getElementById('ipv6StatusHint');
-            if (hintContainer) {
-                hintContainer.innerHTML = '⚠️ 未能检测到IPv6连接，IPv6直连站点可能需要IPv6环境';
-                hintContainer.style.color = '#f59e0b';
-            }
-        };
+        }).catch(() => {
+            clearTimeout(timeoutId);
+            hintContainer.innerHTML = '⚠️ 未能检测到IPv6连接，IPv6直连站点可能需要IPv6环境';
+            hintContainer.style.color = '#f59e0b';
+        });
     }
 
     // ========== 渲染卡片 ==========
