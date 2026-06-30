@@ -115,6 +115,21 @@
                 }
             }
 
+            const detectKey = (() => {
+                const urlObj = new URL(finalUrl);
+                const host = urlObj.host;
+                if (host === 'aiyy.cc.cd' || host.endsWith('.aiyy.cc.cd')) {
+                    return 'aiyy.cc.cd';
+                }
+                if (host === 'aily.dpdns.org:4433' || host.endsWith('.aily.dpdns.org:4433')) {
+                    return 'aily.dpdns.org:4433';
+                }
+                if (host === 'lyy.qd.je:4433' || host.endsWith('.lyy.qd.je:4433')) {
+                    return 'lyy.qd.je:4433';
+                }
+                return host;
+            })();
+
             return {
                 name: site.name,
                 url: finalUrl,
@@ -123,7 +138,8 @@
                 rawHost: displayHost,
                 extraBadge: extraBadge,
                 domainType: site.domainType,
-                group: site.group
+                group: site.group,
+                detectKey
             };
         });
     }
@@ -160,33 +176,41 @@
         }
     }
 
-    function checkSiteStatus(site, index) {
-        const url = site.url;
-        if (!navigator.onLine) {
-            updateSiteStatus(index, '● 离线', 'offline');
-            return;
-        }
+    const detectionTargets = {
+        'aiyy.cc.cd': 'https://aiyy.cc.cd',
+        'aily.dpdns.org:4433': 'https://aily.dpdns.org:4433',
+        'lyy.qd.je:4433': 'https://lyy.qd.je:4433'
+    };
 
-        if (window.location.protocol === 'https:' && url.startsWith('http:')) {
-            updateSiteStatus(index, '⚠️ 无法检测 HTTP 链接', 'warning');
-            return;
-        }
-
-        fetch(url, {
-            method: 'GET',
+    function checkRootStatus(rootUrl) {
+        return fetch(rootUrl, {
+            method: 'HEAD',
             mode: 'no-cors',
             cache: 'no-store',
             credentials: 'omit'
-        }).then(() => {
-            updateSiteStatus(index, '● 在线', 'online');
-        }).catch(() => {
-            updateSiteStatus(index, '● 离线', 'offline');
-        });
+        }).then(() => 'online').catch(() => 'offline');
     }
 
     function checkAllSiteStatuses() {
         updateNetworkStatusHint();
-        sites.forEach((site, index) => checkSiteStatus(site, index));
+        if (!navigator.onLine) {
+            sites.forEach((site, index) => updateSiteStatus(index, '● 离线', 'offline'));
+            return;
+        }
+
+        const resultMap = {};
+        const checks = Object.entries(detectionTargets).map(([key, rootUrl]) => {
+            return checkRootStatus(rootUrl).then(status => {
+                resultMap[key] = status;
+            });
+        });
+
+        Promise.all(checks).then(() => {
+            sites.forEach((site, index) => {
+                const status = resultMap[site.detectKey] || 'offline';
+                updateSiteStatus(index, status === 'online' ? '● 在线' : '● 离线', status);
+            });
+        });
     }
 
     // 全局复制函数
