@@ -31,7 +31,7 @@
         // // ========== aily 服务组（IPv6 直连）==========
         {
             name: "aily",
-            rawUrl: "http://aily.dpdns.org:8888",
+            rawUrl: "https://aily.dpdns.org:4433",
             description: "主站 · 工具与资源中心",
             icon: "✨",
             domainType: "aily",
@@ -39,7 +39,7 @@
         },
         {
             name: "OpenList aily",
-            rawUrl: "http://openlist.aily.dpdns.org:8888",
+            rawUrl: "https://openlist.aily.dpdns.org:4433",
             description: "OpenList 程序 · 快速文件共享",
             icon: "📁",
             domainType: "aily",
@@ -47,7 +47,7 @@
         },
         {
             name: "Blog aily",
-            rawUrl: "http://blog.aily.dpdns.org:8888",
+            rawUrl: "https://blog.aily.dpdns.org:4433",
             description: "博客 · 技术分享与记录",
             icon: "📝",
             domainType: "aily",
@@ -56,7 +56,7 @@
         // ========== LYY 服务组（暂时 IPv6 直连，过段时间改 CF 代理）==========
         {
             name: "LYY",
-            rawUrl: "http://lyy.qd.je:8888",
+            rawUrl: "https://lyy.qd.je:4433",
             description: "主站 · 工具与资源中心（当前 IPv6 直连）",
             icon: "🌟",
             domainType: "aily",     // 暂时 IPv6 直连，后期改为 "cfproxy"
@@ -64,7 +64,7 @@
         },
         {
             name: "OpenList LYY",
-            rawUrl: "http://openlist.lyy.qd.je:8888",
+            rawUrl: "https://openlist.lyy.qd.je:4433",
             description: "OpenList 程序 · 快速文件共享（当前 IPv6 直连）",
             icon: "📂",
             domainType: "aily",     // 暂时 IPv6 直连，后期改为 "cfproxy"
@@ -72,7 +72,7 @@
         },
         {
             name: "Blog LYY",
-            rawUrl: "http://blog.lyy.qd.je:8888",
+            rawUrl: "https://blog.lyy.qd.je:4433",
             description: "博客 · 技术分享与记录（当前 IPv6 直连）",
             icon: "📝",
             domainType: "aily",     // 暂时 IPv6 直连，后期改为 "cfproxy"
@@ -224,13 +224,8 @@
     // ========== 主题切换功能 ==========
     function initTheme() {
         const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        if (savedTheme === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-        } else if (savedTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        } else if (prefersDark) {
+        if (savedTheme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
         } else {
             document.documentElement.setAttribute('data-theme', 'light');
