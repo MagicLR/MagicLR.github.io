@@ -190,7 +190,7 @@
             credentials: 'omit'
         }).then(response => {
             if (response.type === 'opaque') {
-                return 'online';
+                return 'unknown';
             }
             return response.ok ? 'online' : 'offline';
         }).catch(() => 'offline');
@@ -213,7 +213,13 @@
         Promise.all(checks).then(() => {
             sites.forEach((site, index) => {
                 const status = resultMap[site.detectKey] || 'offline';
-                updateSiteStatus(index, status === 'online' ? '● 在线' : '● 离线', status);
+                if (status === 'online') {
+                    updateSiteStatus(index, '● 在线', 'online');
+                } else if (status === 'unknown') {
+                    updateSiteStatus(index, '● 可能在线', 'warning');
+                } else {
+                    updateSiteStatus(index, '● 离线', 'offline');
+                }
             });
             const hint = document.getElementById('networkStatusHint');
             if (hint) {
