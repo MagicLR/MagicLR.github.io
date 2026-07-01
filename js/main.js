@@ -182,15 +182,16 @@
         'lyy.qd.je:4433': 'https://lyy.qd.je:4433'
     };
 
-    function checkRootStatus(rootUrl) {
+    function checkRootStatus(rootUrl, useCors = false) {
         return fetch(rootUrl, {
             method: 'HEAD',
-            mode: 'no-cors',
+            mode: useCors ? 'cors' : 'no-cors',
             cache: 'no-store',
             credentials: 'omit'
         }).then(response => {
             if (response.type === 'opaque') {
-                return 'unknown';
+                // no-cors 模式下无法读取真实状态码，默认认为可达
+                return 'online';
             }
             return response.ok ? 'online' : 'offline';
         }).catch(() => 'offline');
@@ -205,7 +206,8 @@
 
         const resultMap = {};
         const checks = Object.entries(detectionTargets).map(([key, rootUrl]) => {
-            return checkRootStatus(rootUrl).then(status => {
+            const useCors = key === 'aiyy.cc.cd';
+            return checkRootStatus(rootUrl, useCors).then(status => {
                 resultMap[key] = status;
             });
         });
@@ -215,8 +217,6 @@
                 const status = resultMap[site.detectKey] || 'offline';
                 if (status === 'online') {
                     updateSiteStatus(index, '● 在线', 'online');
-                } else if (status === 'unknown') {
-                    updateSiteStatus(index, '● 可能在线', 'warning');
                 } else {
                     updateSiteStatus(index, '● 离线', 'offline');
                 }
