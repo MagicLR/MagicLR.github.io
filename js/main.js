@@ -6,7 +6,7 @@
         // ========== AIYY 服务组（Cloudflare 代理）==========
         {
             name: "AIYY",
-            rawUrl: "http://aiyy.cc.cd",
+            rawUrl: "https://aiyy.cc.cd",
             description: "主站 · 工具与资源中心",
             icon: "🤖",
             domainType: "cfproxy",
@@ -14,7 +14,7 @@
         },
         {
             name: "OpenList AIYY",
-            rawUrl: "http://openlist.aiyy.cc.cd",
+            rawUrl: "https://openlist.aiyy.cc.cd",
             description: "OpenList 程序 · 快速文件共享",
             icon: "📂",
             domainType: "cfproxy",
@@ -188,7 +188,12 @@
             mode: 'no-cors',
             cache: 'no-store',
             credentials: 'omit'
-        }).then(() => 'online').catch(() => 'offline');
+        }).then(response => {
+            if (response.type === 'opaque') {
+                return 'online';
+            }
+            return response.ok ? 'online' : 'offline';
+        }).catch(() => 'offline');
     }
 
     function checkAllSiteStatuses() {
