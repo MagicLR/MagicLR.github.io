@@ -98,10 +98,6 @@
                 const urlObj = new URL(site.rawUrl);
                 displayHost = urlObj.host;
                 extraBadge = "☁️ Cloudflare代理";
-                // 自动升级为 HTTPS 以获得更好的 CF 代理体验
-                if (urlObj.protocol === "http:") {
-                    finalUrl = finalUrl.replace(/^http:/, "https:");
-                }
                 if (!site.description.includes("Cloudflare")) {
                     site.description = "☁️ " + site.description;
                 }
