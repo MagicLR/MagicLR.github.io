@@ -4,30 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>主站 · 快速链接入口</title>
 
+    <title>服务器维护中 - 个人站</title>
+    <meta name="description" content="本站正在进行服务器维护，维护时间为每日 23:00 至次日 9:00，敬请谅解。">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- 预加载关键资源，提升加载速度 -->
+    <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="badge">✦ 主站 ✦</div>
-            <h1>主站导航</h1>
-            <div class="sub">快速跳转 · 直达常用入口</div>
-        </div>
+    <main class="container" role="main">
+        <h1>服务器维护中</h1>
+        <p>每日 23:00 至次日 9:00</p>
+    </main>
 
-        <div class="grid" id="navGrid"></div>
-
-        <div class="footer">
-            <span>📌 点击卡片按钮快速访问 · 收藏以备不时之需</span><br />
-            <span style="font-size:0.7rem; opacity:0.6;">鄂ICP未备10000019号-7</span>
-        </div>
-    </div>
-
-    <script src="js/main.js"></script>
-
+    <!-- 脚本放在末尾并用 defer，避免阻塞渲染 -->
+    <script src="js/main.js" defer></script>
 </body>
 
 </html>
